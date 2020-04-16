@@ -1,0 +1,89 @@
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+
+plugins {
+    id 'java'
+    id 'maven'
+    id 'application'
+
+    id 'com.github.johnrengelman.shadow' version '4.0.2'
+    id 'net.nemerosa.versioning' version '2.8.2'
+    id 'net.kyori.blossom' version '1.1.0'
+}
+
+def git = versioning.info
+def ver = new Version(major: 1, minor: 0, patch: 0, build: git.build)
+
+def buildAuthor = System.getProperty('user.name')
+def buildDate = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH:mm:ss.SSS zZ"))
+
+group = 'uk.sparkydiscordbot'
+version = ver.toString()
+
+description = ''
+
+//We're on Java 8 as Java 9 broke the way class loaders worked and I haven't had chance to update ModuleLoader to support this
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
+    implementation group: 'org.jetbrains', name: 'annotations', version: '15.0'
+    implementation group: 'com.google.guava', name: 'guava', version: '23.0'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.1'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+    implementation group: 'org.json', name: 'json', version: '20170516'
+    implementation(group: 'net.dv8tion', name: 'JDA', version: '4.1.1_133') {
+        exclude(module: 'jsr305')
+        exclude(module: 'slf4j-api')
+    }
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    implementation group: 'org.mongodb', name: 'mongo-java-driver', version: '3.6.3'
+    implementation group: 'com.moandjiezana.toml', name: 'toml4j', version: '0.7.1'
+    implementation group: 'io.sentry', name: 'sentry-log4j2', version: '1.7.10'
+    implementation group: 'io.netty', name: 'netty-all', version: '5.0.0.Alpha2'
+}
+
+shadowJar {
+    archiveName = "Bot.jar"
+    mainClassName = "uk.sparkydiscordbot.Bot"
+}
+
+blossom {
+    def file = 'src/main/java/uk/sparkydiscordbot/BotInfo.java'
+
+    replaceToken '@version_major@', ver.major, file
+    replaceToken '@version_minor@', ver.minor, file
+    replaceToken '@version_patch@', ver.patch, file
+
+    replaceToken '@version_build@', ver.build, file
+
+    replaceToken '@build_author@', buildAuthor, file
+    replaceToken '@build_date@', buildDate, file
+
+    replaceToken '@git_branch@', git.branch, file
+    replaceToken '@git_commit@', git.commit, file
+}
+
+final class Version {
+
+    String major
+    String minor
+    String patch
+    String build
+
+    @Override
+    String toString() {
+        return String.format("%s.%s.%s_%s", major, minor, patch, build)
+    }
+}

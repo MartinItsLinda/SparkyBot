@@ -1,0 +1,25 @@
+[client]
+token = "DISCORD_API_TOKEN"
+game = "SparkyBoy"
+
+#A list of User-ID's representing Administrators
+#             Samuel#0420
+bot_admins = [212530298259374080]
+
+#Bot list API keys
+carbon_key = "CARBON_API_KEY"
+dbl_key = "DISCORD_BOT_LIST_KEY"
+
+use_beta_builds = false
+
+[db]
+database = "discord"
+user = "user"
+psswd = "pass"
+host = "localhost"
+port = 3306
+
+[nodes]
+node-id = 1
+shards-total = 20
+shards = 10

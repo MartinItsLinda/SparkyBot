@@ -1,0 +1,27 @@
+<configuration>
+
+    <!--STDOUT-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>utf-8</charset>
+            <pattern>[%date{HH:mm:ss}][%thread/%level]: [%logger{0}] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--File logger-->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/latest.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/%d{dd-MM-yyyy}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%date{HH:mm:ss}][%thread/%level]: [%logger{0}] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>

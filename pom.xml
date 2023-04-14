@@ -18,7 +18,7 @@
         <commons.version>2.6</commons.version>
         <commons.logging.version>1.2</commons.logging.version>
         <slf4j.version>1.8.0-beta2</slf4j.version>
-        <json.version>20170516</json.version>
+        <json.version>20230227</json.version>
         <jda.version>3.8.0_436</jda.version>
         <jda-nas.version>1.0.6</jda-nas.version>
         <mongo.version>3.6.3</mongo.version>
